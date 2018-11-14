@@ -79,8 +79,10 @@ func createRequest(r *http.Request, forwardPath AppCore.TargetPath, originalReq 
 	}
 
 	req.Header.Set("Content-Type", req_content_type)
-	req.Header.Set("msg-data", msg)
-	req.Header.Set("Authorization", msg)
+	req.Header.Set("Message", msg)
+	// ToDO temp when finish integration
+	req_token := r.Header.Get("Authorization")
+	req.Header.Set("Authorization", req_token)
 
 	logger.ForwardPath = newPath
 	logger.AddStep("createRequest : Every Thing Is Good ", "")

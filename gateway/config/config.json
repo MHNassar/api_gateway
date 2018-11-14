@@ -2,6 +2,9 @@
   "router": {
     "port": "8081",
     "Services": [
+      /*
+         Admins and Application managment Service
+      */
       {
         "ServicePrefix": "applications",
         "TargetPath": {
@@ -10,7 +13,14 @@
         }
       },
       {
-        "ServicePrefix": "configurations",
+        "ServicePrefix": "admin",
+        "TargetPath": {
+          "path": "http://sandbox.bolt-play.com:7000",
+          "auth": false
+        }
+      },
+      {
+        "ServicePrefix": "application",
         "TargetPath": {
           "path": "http://sandbox.bolt-play.com:7000",
           "auth": true

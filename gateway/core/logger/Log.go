@@ -4,7 +4,6 @@ import (
 	"time"
 	"encoding/json"
 	"log"
-	"github.com/utahta/go-cronowriter"
 )
 
 type Logger struct {

@@ -6,9 +6,9 @@ import (
 	"strings"
 	"github.com/dgrijalva/jwt-go"
 	"encoding/json"
-	//"encoding/base64"
 	"os"
 	AppLogger "api_gateway/gateway/core/logger"
+	"encoding/base64"
 )
 
 func CheckAuth(r *http.Request, auth bool) (string, error) {
@@ -20,18 +20,19 @@ func CheckAuth(r *http.Request, auth bool) (string, error) {
 			err := fmt.Errorf("Token not found")
 			return "", err
 		}
-		_, err := parseToken(token)
+		tokenData, err := parseToken(token)
 		if err != nil {
 			return "", err
 		}
 
-		//base64encoded := base64.StdEncoding.EncodeToString([]byte(tokenData))
-		//encText, err := encryption(base64encoded)
-		//if err != nil {
-		//	return "", err
-		//}
+		base64encoded := base64.StdEncoding.EncodeToString([]byte(tokenData))
+		encText, err := encryption(base64encoded)
+		if err != nil {
+			return "", err
+		}
+		fmt.Println(encText)
 		logger.AddStep("CheckAuth : Every Thing Is Good ", "")
-		return token, nil
+		return encText, nil
 	}
 	logger.AddStep("CheckAuth : Request Not Needs Auth", " ")
 	return "", nil
