@@ -12,7 +12,9 @@ import (
 )
 
 func HttpHandler(w http.ResponseWriter, r *http.Request, router AppCore.Router) {
+
 	originalPath := r.URL.Path
+
 	// init logger
 	logger := AppLogger.GetLogInstance()
 	logger.InitLog(originalPath)
@@ -71,6 +73,10 @@ func HttpHandler(w http.ResponseWriter, r *http.Request, router AppCore.Router) 
 func createRequest(r *http.Request, forwardPath AppCore.TargetPath, originalReq string, msg string) (*http.Request, error) {
 	logger := AppLogger.GetLogInstance()
 	newPath := forwardPath.Path + originalReq
+	if r.URL.RawQuery != "" {
+		newPath += "?" + r.URL.RawQuery
+	}
+
 	req_content_type := r.Header.Get("Content-Type")
 	req, err := http.NewRequest(r.Method, newPath, r.Body)
 	if err != nil {
