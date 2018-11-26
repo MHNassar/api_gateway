@@ -1,35 +1,95 @@
 {
   "router": {
-    "port": "8081",
+    "port": "8282",
     "Services": [
       {
         "ServicePrefix": "applications",
         "TargetPath": {
-          "path": "http://sandbox.bolt-play.com:7000",
+          "path": "http://refactor-gateway.bolt-play.com:7000",
           "auth": false
         }
       },
       {
         "ServicePrefix": "admin",
         "TargetPath": {
-          "path": "http://sandbox.bolt-play.com:7000",
+          "path": "http://refactor-gateway.bolt-play.com:7000",
           "auth": false
         }
       },
       {
         "ServicePrefix": "application",
         "TargetPath": {
-          "path": "http://sandbox.bolt-play.com:7000",
+          "path": "http://refactor-gateway.bolt-play.com:7000",
           "auth": true
         }
       },
       {
         "ServicePrefix": "configurations",
         "TargetPath": {
-          "path": "http://sandbox.bolt-play.com:7000",
+          "path": "http://refactor-gateway.bolt-play.com:7000",
+          "auth": true
+        }
+      },
+      {
+        "ServicePrefix": "activity_log",
+        "TargetPath": {
+          "path": "http://refactor-gateway.bolt-play.com:7000",
+          "auth": true
+        }
+      },
+      {
+        "ServicePrefix": "series",
+        "TargetPath": {
+          "path": "http://refactor-gateway.bolt-play.com:7000",
+          "auth": true
+        }
+      },
+      {
+        "ServicePrefix": "content",
+        "TargetPath": {
+          "path": "http://refactor-gateway.bolt-play.com:7000",
+          "auth": true
+        }
+      },
+      {
+        "ServicePrefix": "metadata",
+        "TargetPath": {
+          "path": "http://refactor-gateway.bolt-play.com:7000",
+          "auth": true
+        }
+      },
+      {
+        "ServicePrefix": "publish",
+        "TargetPath": {
+          "path": "http://refactor-gateway.bolt-play.com:7000",
+          "auth": true
+        }
+      },
+      {
+        "ServicePrefix": "tags",
+        "TargetPath": {
+          "path": "http://refactor-gateway.bolt-play.com:9005",
+          "auth": true
+        }
+      },
+      {
+        "ServicePrefix": "categories",
+        "TargetPath": {
+          "path": "http://refactor-gateway.bolt-play.com:9005",
+          "auth": true
+        }
+      },
+      {
+        "ServicePrefix": "feed",
+        "TargetPath": {
+          "path": "http://refactor-gateway.bolt-play.com:9005",
           "auth": true
         }
       }
+
+
+
+
     ]
   }
 }
