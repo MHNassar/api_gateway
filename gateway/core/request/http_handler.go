@@ -99,16 +99,12 @@ func createRequest(r *http.Request, forwardPath AppCore.TargetPath, originalReq 
 func checkServiceExist(router AppCore.Router, originalPath string) (AppCore.Services, error) {
 	service_name_rray := strings.Split(originalPath, "/")
 	service_prefix := service_name_rray[1]
-	var service AppCore.Services
-	var err error
-	for _, v := range router.Services {
 
-		if v.ServicePrefix == service_prefix {
-			service = v
-		}
-	}
+	service := getService(router, service_prefix)
+
 	if service.ServicePrefix == "" {
-		err = fmt.Errorf("Service not Found")
+		service = getService(router, "default")
+		//err = fmt.Errorf("Service not Found")
 	}
 	// add loges steps
 	errString := ""
@@ -120,4 +116,15 @@ func checkServiceExist(router AppCore.Router, originalPath string) (AppCore.Serv
 	logger.AddStep("checkServiceExist : Every Thing Is Good", errString)
 	return service, err
 
+}
+
+func getService(router AppCore.Router, service_prefix string) AppCore.Services {
+	var service AppCore.Services
+
+	for _, v := range router.Services {
+		if v.ServicePrefix == service_prefix {
+			service = v
+		}
+	}
+	return service
 }
