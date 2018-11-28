@@ -104,17 +104,11 @@ func checkServiceExist(router AppCore.Router, originalPath string) (AppCore.Serv
 
 	if service.ServicePrefix == "" {
 		service = getService(router, "default")
-		//err = fmt.Errorf("Service not Found")
-	}
-	// add loges steps
-	errString := ""
-	if err != nil {
-		errString = err.Error()
 	}
 
 	logger := AppLogger.GetLogInstance()
-	logger.AddStep("checkServiceExist : Every Thing Is Good", errString)
-	return service, err
+	logger.AddStep("checkServiceExist : Every Thing Is Good", "")
+	return service, nil
 
 }
 
