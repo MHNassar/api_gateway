@@ -67,6 +67,7 @@ func HttpHandler(w http.ResponseWriter, r *http.Request, router AppCore.Router) 
 	AppLogger.DestroyLogInstance()
 
 	w.Write([]byte(body))
+	w.WriteHeader(resp.StatusCode)
 
 }
 
