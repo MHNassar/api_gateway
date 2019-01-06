@@ -1,12 +1,19 @@
 package core
 
+import "time"
+
 type JsonRoot struct {
 	Router Router
 }
 
 type Router struct {
 	Port     string
+	Settings Settings
 	Services []Services
+}
+
+type Settings struct {
+	TimeOut time.Duration
 }
 
 type Services struct {

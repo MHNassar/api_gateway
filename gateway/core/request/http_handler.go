@@ -6,12 +6,9 @@ import (
 	AppLogger "api_gateway/gateway/core/logger"
 	"net/http"
 	"fmt"
-	"strings"
-	"io/ioutil"
-	"time"
 )
 
-func HttpHandler(w http.ResponseWriter, r *http.Request, router AppCore.Router) {
+func HttpHandler(w http.ResponseWriter, r *http.Request, router AppCore.Router) int {
 
 	originalPath := r.URL.Path
 
@@ -24,8 +21,9 @@ func HttpHandler(w http.ResponseWriter, r *http.Request, router AppCore.Router) 
 	msg, err := AppAuth.CheckAuth(r, service.TargetPath.Auth)
 	if err != nil {
 		AppLogger.DestroyLogInstance()
-
+		fmt.Println("not message")
 		AppCore.ShowError(w, err, http.StatusUnauthorized)
+		return 0
 	}
 	var req *http.Request
 
@@ -35,91 +33,12 @@ func HttpHandler(w http.ResponseWriter, r *http.Request, router AppCore.Router) 
 	if err != nil {
 		logger.AddStep("HttpHandler", err.Error())
 		AppLogger.DestroyLogInstance()
-
+		fmt.Println("not createRequest")
 		AppCore.ShowError(w, err, http.StatusBadGateway)
+		return 0
 	}
 
 	fmt.Printf("forwarded to default :%v\n", req.URL)
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		logger.AddStep("HttpHandler", err.Error())
-		AppLogger.DestroyLogInstance()
-
-		AppCore.ShowError(w, err, http.StatusBadGateway)
-	}
-	//
-	defer resp.Body.Close()
-	//
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		logger.AddStep("HttpHandler", err.Error())
-		AppLogger.DestroyLogInstance()
-		AppCore.ShowError(w, err, http.StatusBadGateway)
-	}
-
-	headerResp := strings.Join(resp.Header["Content-Type"], "")
-	w.Header().Set("Content-Type", headerResp)
-	logger.AddStep("HttpHandler : Request Send Successfully", "")
-	logger.EndTime = time.Now()
-	logger.Status = true
-
-	AppLogger.DestroyLogInstance()
-
-	w.Write([]byte(body))
-	w.WriteHeader(resp.StatusCode)
-
-}
-
-func createRequest(r *http.Request, forwardPath AppCore.TargetPath, originalReq string, msg string) (*http.Request, error) {
-	logger := AppLogger.GetLogInstance()
-	newPath := forwardPath.Path + originalReq
-	if r.URL.RawQuery != "" {
-		newPath += "?" + r.URL.RawQuery
-	}
-
-	req_content_type := r.Header.Get("Content-Type")
-	req, err := http.NewRequest(r.Method, newPath, r.Body)
-	if err != nil {
-		logger.AddStep("createRequest", err.Error())
-		return nil, err
-	}
-
-	req.Header.Set("Content-Type", req_content_type)
-	req.Header.Set("Message", msg)
-	// ToDO temp when finish integration
-	req_token := r.Header.Get("Authorization")
-	req.Header.Set("Authorization", req_token)
-
-	logger.ForwardPath = newPath
-	logger.AddStep("createRequest : Every Thing Is Good ", "")
-
-	return req, nil
-}
-
-func checkServiceExist(router AppCore.Router, originalPath string) (AppCore.Services, error) {
-	service_name_rray := strings.Split(originalPath, "/")
-	service_prefix := service_name_rray[1]
-
-	service := getService(router, service_prefix)
-
-	if service.ServicePrefix == "" {
-		service = getService(router, "default")
-	}
-
-	logger := AppLogger.GetLogInstance()
-	logger.AddStep("checkServiceExist : Every Thing Is Good", "")
-	return service, nil
-
-}
-
-func getService(router AppCore.Router, service_prefix string) AppCore.Services {
-	var service AppCore.Services
-
-	for _, v := range router.Services {
-		if v.ServicePrefix == service_prefix {
-			service = v
-		}
-	}
-	return service
+	res := sendRequest(w, req, router)
+	return res
 }

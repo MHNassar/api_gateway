@@ -6,4 +6,4 @@ services:
       container_name: api_gateway_dev
       env_file: .env
       ports:
-            - "0:8081:8081"
+            - "0:8085:8085"
