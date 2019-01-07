@@ -1,6 +1,9 @@
 {
   "router": {
     "port": "8282",
+    "settings": {
+      "timeout": 10
+    },
     "Services": [
       {
         "ServicePrefix": "applications",
@@ -86,10 +89,6 @@
           "auth": true
         }
       }
-
-
-
-
     ]
   }
 }
