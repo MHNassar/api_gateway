@@ -1,7 +1,3 @@
-// Copyright 2016 kadiray karakaya. All rights reserved.
-// Use of this source code is governed by a MIT-style
-// license that can be found in the LICENSE file.
-
 package main
 
 import (
@@ -9,22 +5,30 @@ import (
 	"net/http"
 	initApp "api_gateway/gateway/core/init"
 	requestHandler "api_gateway/gateway/core/request"
+	monitors "api_gateway/gateway/core/monitor"
+	"time"
 )
 
 func main() {
+	fmt.Println("start App .. ")
 	Router := initApp.ReadConfig()
-	fmt.Printf("listening on port: %v\n", Router.Port)
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// To Enable CORS
+
 		enableCORS(&w)
 		if (*r).Method == "OPTIONS" {
 			return
 		}
+		monitors.PrintMonitor()
 		requestHandler.HttpHandler(w, r, Router)
 	})
 
-	http.ListenAndServe(":"+Router.Port, nil)
+	srv := &http.Server{
+		Addr:         ":" + Router.Port,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+	srv.ListenAndServe()
 }
 
 func enableCORS(w *http.ResponseWriter) {

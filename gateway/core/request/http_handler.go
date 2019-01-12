@@ -38,7 +38,7 @@ func HttpHandler(w http.ResponseWriter, r *http.Request, router AppCore.Router) 
 		return 0
 	}
 
-	fmt.Printf("forwarded to default :%v\n", req.URL)
 	res := sendRequest(w, req, router)
+
 	return res
 }

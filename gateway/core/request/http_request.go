@@ -8,6 +8,7 @@ import (
 	"io/ioutil"
 	"strings"
 	"time"
+	"net"
 )
 
 func createRequest(r *http.Request, forwardPath AppCore.TargetPath, originalReq string, msg string) (*http.Request, error) {
@@ -38,10 +39,10 @@ func createRequest(r *http.Request, forwardPath AppCore.TargetPath, originalReq 
 
 func sendRequest(w http.ResponseWriter, req *http.Request, router AppCore.Router) int {
 
-	timeOutValue := router.Settings.TimeOut
-	timeout := time.Duration(timeOutValue * time.Second)
 	logger := AppLogger.GetLogInstance()
-	client := &http.Client{Timeout: timeout}
+
+	client := createHttpClient(router)
+
 	defer handelPanicRequest()
 	resp, err := client.Do(req)
 	if err != nil {
@@ -78,4 +79,26 @@ func handelPanicRequest() {
 	if r := recover(); r != nil {
 		fmt.Println("recovered from ", r)
 	}
+}
+
+func createHttpClient(router AppCore.Router) *http.Client {
+	timeOutValue := router.Settings.TimeOut
+	timeout := time.Duration(timeOutValue * time.Second)
+	keepAliveTimeout := 600 * time.Second
+	var netTransport = &http.Transport{
+		Dial: (&net.Dialer{
+			Timeout:   timeout,
+			KeepAlive: keepAliveTimeout,
+		}).Dial,
+		TLSHandshakeTimeout:   10 * time.Second,
+		MaxIdleConns:          100,
+		MaxIdleConnsPerHost:   100,
+		ResponseHeaderTimeout: 10 * time.Second,
+		ExpectContinueTimeout: 1 * time.Second,
+	}
+
+	client := &http.Client{
+		Transport: netTransport,
+		Timeout:   timeout}
+	return client
 }
