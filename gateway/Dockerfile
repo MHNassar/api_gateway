@@ -1,7 +1,7 @@
 
 FROM golang:latest
 
-RUN go get github.com/dgrijalva/jwt-go github.com/sadlil/gologger
+RUN go get github.com/dgrijalva/jwt-go github.com/sadlil/gologger golang.org/x/crypto/acme/autocert
 
 COPY . /go/src/api_gateway/gateway
 
