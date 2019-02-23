@@ -6,6 +6,20 @@ services:
       container_name: api_gateway_dev
       mem_limit: 1024m
       env_file: .env
-      ports:
-            - "0:9090:80"
-            - "0:9091:443"
+
+  nginx:
+        build:
+              context:
+                ./nginx
+              args:
+                SERVER_NAME: $SERVER_NAME
+        container_name: apiGateway-proxy
+        ports:
+          - 9090:80
+          - 9091:443
+        volumes:
+              - /var/run/docker.sock:/tmp/docker.sock:ro
+              - $PUBLIC_PEM_FILE:/ssl_cert/fullchain.pem:ro
+              - $PRIVATE_PEM_FILE:/ssl_cert/privkey.pem:ro
+        depends_on:
+         - gateway
