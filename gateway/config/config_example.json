@@ -1,6 +1,6 @@
 {
   "router": {
-    "port": "9090",
+    "port": "9009",
     "settings": {
       "timeout": 500
     },
