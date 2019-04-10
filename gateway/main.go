@@ -18,6 +18,9 @@ func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
+		if r.URL.Path == "/" {
+			return
+		}
 		enableCORS(&w)
 		if (*r).Method == "OPTIONS" {
 			return
