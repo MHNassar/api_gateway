@@ -95,22 +95,35 @@
           "path": "http://172.31.24.145:7000",
           "auth": true
         }
-       },
+      },
       {
         "ServicePrefix": "analytics-content",
         "TargetPath": {
           "path": "http://13.57.149.11:5000",
           "auth": true
         }
-       },
-       {
+      },
+      {
         "ServicePrefix": "analytics-admin",
         "TargetPath": {
           "path": "http://13.57.149.11:5001",
           "auth": true
         }
-       }
-
+      },
+      {
+        "ServicePrefix": "user",
+        "TargetPath": {
+          "path": "https://userelb-ac338d8414d315c6.elb.us-west-2.amazonaws.com",
+          "auth": true
+        }
+      },
+      {
+        "ServicePrefix": "users",
+        "TargetPath": {
+          "path": "https://userelb-ac338d8414d315c6.elb.us-west-2.amazonaws.com",
+          "auth": true
+        }
+      }
     ]
   }
 }
