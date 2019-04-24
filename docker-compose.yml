@@ -4,7 +4,7 @@ services:
       build: ./gateway
       image: api_gateway/gateway
       container_name: api_gateway_dev
-      mem_limit: 1024m
+      mem_limit: 3072m
       env_file: .env
 
   nginx:
