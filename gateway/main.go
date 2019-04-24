@@ -18,6 +18,11 @@ func main() {
 			return
 		}
 
+		enableCORS(&w)
+		if (*r).Method == "OPTIONS" {
+			return
+		}
+
 		requestHandler.HttpHandler(w, r, Router)
 	})
 
